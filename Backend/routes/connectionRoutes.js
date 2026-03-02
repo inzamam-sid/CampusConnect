@@ -1,18 +1,27 @@
 const router = require("express").Router();
 const authMiddleware = require("../middleware/authMiddleware");
+
 const {
   sendRequest,
   acceptRequest,
+  rejectRequest,
+  getPendingRequests,
   getMyConnections
 } = require("../controllers/connectionController");
 
-// Send connection request
+// Send request
 router.post("/request/:id", authMiddleware, sendRequest);
 
-// Accept connection request
+// Accept
 router.put("/accept/:id", authMiddleware, acceptRequest);
 
-// Get my connections
+// Reject
+router.put("/reject/:id", authMiddleware, rejectRequest);
+
+// Get pending
+router.get("/pending", authMiddleware, getPendingRequests);
+
+// Get connections
 router.get("/", authMiddleware, getMyConnections);
 
 module.exports = router;
