@@ -11,7 +11,10 @@ exports.createPost = async (req, res) => {
 };
 
 exports.getFeed = async (req, res) => {
-  const posts = await Post.find().populate("user", "firstName lastName").sort({ createdAt: -1 });
+  const posts = await Post.find()
+  .populate("user", "firstName lastName")
+  .populate("comments.user", "firstName lastName")
+  .sort({ createdAt: -1 });
   res.json(posts);
 };
 
