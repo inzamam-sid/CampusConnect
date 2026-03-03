@@ -13,6 +13,7 @@ const {
 router.post("/request/:id", authMiddleware, sendRequest);
 
 // Accept
+
 router.put("/accept/:id", authMiddleware, acceptRequest);
 
 // Reject

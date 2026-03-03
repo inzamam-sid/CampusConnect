@@ -11,11 +11,29 @@ exports.createPost = async (req, res) => {
 };
 
 exports.getFeed = async (req, res) => {
-  const posts = await Post.find()
-  .populate("user", "firstName lastName")
-  .populate("comments.user", "firstName lastName")
-  .sort({ createdAt: -1 });
-  res.json(posts);
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5; // posts per page
+    const skip = (page - 1) * limit;
+
+    const totalPosts = await Post.countDocuments();
+
+    const posts = await Post.find()
+      .populate("user", "firstName lastName department")
+      .populate("comments.user", "firstName lastName")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      posts,
+      currentPage: page,
+      totalPages: Math.ceil(totalPosts / limit),
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 
